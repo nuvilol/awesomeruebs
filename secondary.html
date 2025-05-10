@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            max-width: 600px;
+            margin: auto;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #f97316;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Panel</h1>
+    <form id="configForm">
+        <label for="announcement">Announcement Text</label>
+        <input type="text" id="announcement" name="announcement">
+
+        <label for="tiles">Live Tiles (format: image-url|link-url|date per line)</label>
+        <textarea id="tiles" name="tiles" rows="10" placeholder="https://img.jpg|https://link.com|5/11/25"></textarea>
+
+        <button type="submit">Save Configuration</button>
+    </form>
+
+    <script>
+        document.getElementById('configForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const announcement = document.getElementById('announcement').value;
+            const tiles = document.getElementById('tiles').value.trim().split('\n').map(line => {
+                const parts = line.split('|');
+                return { img: parts[0], link: parts[1], date: parts[2] || '' };
+            });
+            const config = { announcement, tiles };
+            localStorage.setItem('streamSiteConfig', JSON.stringify(config));
+            localStorage.setItem('announcement', announcement);
+            localStorage.setItem('cards', tiles.map(t => `${t.img}|${t.link}|${t.date}`).join('\n'));
+            alert('Configuration Saved!');
+        });
+
+        // Load existing config
+        window.onload = () => {
+            const saved = JSON.parse(localStorage.getItem('streamSiteConfig'));
+            if (saved) {
+                document.getElementById('announcement').value = saved.announcement;
+                document.getElementById('tiles').value = saved.tiles.map(t => `${t.img}|${t.link}|${t.date}`).join('\n');
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Main Site</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #1e1e1e;
+      color: white;
+    }
+
+    nav {
+      background: #111;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px;
+    }
+
+    nav a {
+      background: #333;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 15px;
+      font-weight: bold;
+      transition: background 0.2s ease;
+    }
+
+    nav a:hover {
+      background: #444;
+    }
+
+    .announcement {
+      background: #f57c00;
+      padding: 10px;
+      text-align: center;
+      margin: 20px auto;
+      width: 80%;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      justify-items: center;
+    }
+
+    .card {
+      position: relative;
+      width: 200px;
+      height: 120px;
+      border-radius: 10px;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card span {
+      position: absolute;
+      bottom: 5px;
+      left: 5px;
+      font-weight: bold;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    .card-date {
+      margin-top: 5px;
+      font-size: 0.9rem;
+      color: #ccc;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">HOME</a>
+    <a href="https://yourmerchlink.com">MERCH</a>
+    <a href="#updates">UPDATES</a>
+    <a href="https://example.com/more">MORE</a>
+  </nav>
+
+  <div class="announcement" id="announcement">Loading announcement...</div>
+  <div class="grid" id="card-container">Loading cards...</div>
+
+  <script>
+    const announcementEl = document.getElementById('announcement');
+    const container = document.getElementById('card-container');
+
+    function loadData() {
+      const announcement = localStorage.getItem('announcement') || 'Default Announcement';
+      const cardsRaw = localStorage.getItem('cards') || '';
+      announcementEl.textContent = announcement;
+
+      container.innerHTML = '';
+      cardsRaw.split('\n').forEach(line => {
+        const [img, link, date] = line.split('|');
+        if (img && link) {
+          const wrapper = document.createElement('div');
+          wrapper.style.textAlign = 'center';
+
+          const card = document.createElement('a');
+          card.href = link.trim();
+          card.target = '_blank';
+          card.className = 'card';
+          card.innerHTML = `<img src="${img.trim()}" alt=""><span>Live</span>`;
+
+          const dateEl = document.createElement('div');
+          dateEl.className = 'card-date';
+          dateEl.textContent = date ? date.trim() : '';
+
+          wrapper.appendChild(card);
+          wrapper.appendChild(dateEl);
+          container.appendChild(wrapper);
+        }
+      });
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
