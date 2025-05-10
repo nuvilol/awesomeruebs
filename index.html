@@ -20,17 +20,18 @@
       padding: 10px;
     }
 
-    nav a {
+    nav button {
       background: #333;
       color: white;
       padding: 10px 20px;
-      text-decoration: none;
+      border: none;
       border-radius: 15px;
       font-weight: bold;
       transition: background 0.2s ease;
+      cursor: pointer;
     }
 
-    nav a:hover {
+    nav button:hover {
       background: #444;
     }
 
@@ -88,10 +89,13 @@
     }
 
     #admin-access {
+      position: fixed;
+      bottom: 5px;
+      width: 100%;
       text-align: center;
-      margin: 100px auto 20px;
       font-size: 0.8rem;
       opacity: 0.2;
+      transition: opacity 0.5s ease-in;
     }
 
     #admin-access input,
@@ -111,23 +115,24 @@
 </head>
 <body>
   <nav>
-    <a href="index.html">HOME</a>
-    <a href="index.html">MERCH</a>
-    <a href="index.html">UPDATES</a>
-    <a href="index.html">MORE</a>
+    <button onclick="location.href='index.html'">HOME</button>
+    <button onclick="location.href='index.html'">MERCH</button>
+    <button onclick="location.href='index.html'">UPDATES</button>
+    <button onclick="location.href='index.html'">MORE</button>
   </nav>
 
   <div class="announcement" id="announcement">Loading announcement...</div>
   <div class="grid" id="card-container">Loading cards...</div>
 
   <div id="admin-access">
-    <input type="password" id="passcode" placeholder="Admin Access">
+    <input type="password" id="passcode" placeholder="Secret-Code">
     <button onclick="checkPasscode()">Enter</button>
   </div>
 
   <script>
     const announcementEl = document.getElementById('announcement');
     const container = document.getElementById('card-container');
+    const adminAccess = document.getElementById('admin-access');
 
     function loadData() {
       const announcement = localStorage.getItem('announcement') || 'Default Announcement';
@@ -135,7 +140,7 @@
       announcementEl.textContent = announcement;
 
       container.innerHTML = '';
-      cardsRaw.split('\n').forEach(line => {
+      cardsRaw.split('\\n').forEach(line => {
         const [img, link, date] = line.split('|');
         if (img && link) {
           const wrapper = document.createElement('div');
@@ -145,7 +150,7 @@
           card.href = link.trim();
           card.target = '_blank';
           card.className = 'card';
-          card.innerHTML = `<img src="${img.trim()}" alt=""><span>Live</span>`;
+          card.innerHTML = `<img src=\"${img.trim()}\" alt=\"\"><span>Live</span>`;
 
           const dateEl = document.createElement('div');
           dateEl.className = 'card-date';
@@ -167,7 +172,10 @@
       }
     }
 
-    loadData();
+    window.onload = () => {
+      adminAccess.style.opacity = 0.2;
+      loadData();
+    };
   </script>
 </body>
 </html>
