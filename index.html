@@ -86,6 +86,27 @@
       color: #ccc;
       text-align: center;
     }
+
+    #admin-access {
+      text-align: center;
+      margin: 100px auto 20px;
+      font-size: 0.8rem;
+      opacity: 0.2;
+    }
+
+    #admin-access input,
+    #admin-access button {
+      padding: 6px;
+      border-radius: 6px;
+      border: none;
+    }
+
+    #admin-access button {
+      background: #f57c00;
+      color: white;
+      margin-left: 6px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -98,6 +119,11 @@
 
   <div class="announcement" id="announcement">Loading announcement...</div>
   <div class="grid" id="card-container">Loading cards...</div>
+
+  <div id="admin-access">
+    <input type="password" id="passcode" placeholder="Admin Access">
+    <button onclick="checkPasscode()">Enter</button>
+  </div>
 
   <script>
     const announcementEl = document.getElementById('announcement');
@@ -130,6 +156,15 @@
           container.appendChild(wrapper);
         }
       });
+    }
+
+    function checkPasscode() {
+      const pass = document.getElementById('passcode').value;
+      if (pass === 'XasDasBas') {
+        window.location.href = 'secondary.html';
+      } else {
+        alert('Incorrect passcode');
+      }
     }
 
     loadData();
