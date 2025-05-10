@@ -47,7 +47,7 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 20px;
       padding: 20px;
       justify-items: center;
@@ -147,13 +147,15 @@
         const [img, link, date] = line.split('|');
         if (img && link) {
           const wrapper = document.createElement('div');
+          wrapper.style.width = '150px';
+          wrapper.style.margin = 'auto';
           wrapper.style.textAlign = 'center';
 
           const card = document.createElement('a');
           card.href = link.trim();
           card.target = '_blank';
           card.className = 'card';
-          card.innerHTML = `<img src=\"${img.trim()}\" alt=\"\"><span>Live</span>`;
+          card.innerHTML = `<img src="${img.trim()}" alt=""><span>Live</span>`;
 
           const dateEl = document.createElement('div');
           dateEl.className = 'card-date';
@@ -175,10 +177,12 @@
       }
     }
 
-    window.onload = () => {
+    window.addEventListener('load', () => {
       adminAccess.style.opacity = 0.2;
-      loadData();
-    };
+      requestAnimationFrame(() => {
+        setTimeout(loadData, 10);
+      });
+    });
   </script>
 </body>
 </html>
